@@ -1,0 +1,12 @@
+{
+    "folders": [
+        {
+            "name": "proyek pertama",
+            "path": "../../.."
+        },
+        {
+            "name": "citycareapp-starter-project",
+            "path": "../../../../citycareapp-starter-project"
+        }
+    ]
+}
