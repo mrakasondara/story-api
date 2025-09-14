@@ -90,7 +90,9 @@ export default class LoginPage {
     location.hash = "/home";
   }
 
-  loginFailed(message) {}
+  loginFailed(message) {
+    showAlert("Login failed", "failed");
+  }
 
   showLoginLoadingButton() {
     document.getElementById("login-button").classList.add("hidden");

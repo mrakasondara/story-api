@@ -15,7 +15,7 @@ export const routes = {
   "/home": () => (getAccessToken() ? new HomePage() : new LoginPage()),
   "/about": () => (getAccessToken() ? new AboutPage() : new LoginPage()),
   "/story/:id": () => (getAccessToken() ? new DetailPage() : new LoginPage()),
-  "/add-story": () => (getAccessToken() ? new AddStory() : new LoginPage()),
+  "/add-story": () => new AddStory(),
 
   "/login": () => (getAccessToken() ? new HomePage() : new LoginPage()),
   "/register": () => (getAccessToken() ? new HomePage() : new RegisterPage()),

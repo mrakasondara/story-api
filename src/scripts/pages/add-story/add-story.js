@@ -1,7 +1,8 @@
-import { handleFileChange } from "../../utils/index";
+import { handleFileChange, showAlert } from "../../utils/index";
 import * as StoryAPI from "../../data/api";
 import AddStoryPresenter from "./add-story-presenter";
 import Map from "../../utils/map";
+import Camera from "../../utils/camera";
 
 export default class AddStory {
   #presenter;
@@ -21,8 +22,7 @@ export default class AddStory {
                         <img src="/images/placeholder.png" class="h-80 rounded-lg" alt="photo-preview" id="photo-preview" />
                     </div>
 
-                    <div class="flex justify-center gap-2 mt-2 hidden" id="camera-container">
-                    tes
+                    <div class="flex flex-col lg:flex-row justify-center gap-2 mt-2 hidden" id="camera-container">
                         <video src="" id="camera-video" class="w-full rounded-lg">
                           Video stream not available.
                         </video>
@@ -145,12 +145,13 @@ export default class AddStory {
 
       const data = {
         description: this.#form.elements.namedItem("description").value,
-        latitude: this.#form.elements.namedItem("latitude").value,
-        longitude: this.#form.elements.namedItem("longitude").value,
-        photo: this.#form.elements.namedItem("photo").files.photo,
+        lat: Number(this.#form.elements.namedItem("latitude").value),
+        lon: Number(this.#form.elements.namedItem("longitude").value),
+        photo: this.#takenStory,
       };
 
       await this.#presenter.postNewStory(data);
+      this.#camera.stop();
     });
 
     const cameraContainer = document.getElementById("camera-container");
@@ -167,6 +168,7 @@ export default class AddStory {
           return;
         }
         e.currentTarget.textContent = "Open Camera";
+        this.#camera.stop();
       });
   }
 
@@ -177,10 +179,66 @@ export default class AddStory {
 
   #setupCamera() {
     if (!this.#camera) {
-      this.#camera = new Camera();
+      this.#camera = new Camera({
+        video: document.getElementById("camera-video"),
+        cameraSelect: document.getElementById("camera-select"),
+        canvas: document.getElementById("camera-canvas"),
+      });
     }
+
+    this.#camera.addCheeseButtonListener("#camera-take-button", async () => {
+      const image = await this.#camera.takePicture();
+      await this.#addTakenPicture(image);
+    });
   }
 
-  showMapLoading() {}
-  hideMapLoading() {}
+  async #addTakenPicture(image) {
+    let blob = image;
+
+    if (image instanceof String) {
+      blob = await convertBase64ToBlob(image, "image/png");
+    }
+
+    const file = new File([blob], "photo.png", {
+      type: "image/png",
+      lastModified: Date.now(),
+    });
+
+    this.#takenStory = file;
+  }
+
+  storeFailed(message) {
+    showAlert(message, "failed");
+  }
+
+  storeSuccessFully(message) {
+    showAlert(message, "success");
+    this.#clearForm();
+    location.href = "/";
+  }
+
+  #clearForm() {
+    this.#form.reset();
+  }
+
+  showMapLoading() {
+    document.getElementById("map").classList.add("hidden");
+    document.getElementById("skeleton-map-detail").classList.remove("hidden");
+  }
+  hideMapLoading() {
+    document.getElementById("map").classList.remove("hidden");
+    document.getElementById("skeleton-map-detail").classList.add("hidden");
+  }
+
+  showAddStoryLoadingButton() {
+    document.getElementById("add-story-button").classList.add("hidden");
+    document
+      .getElementById("add-story-loading-button")
+      .classList.remove("hidden");
+  }
+
+  hideAddStoryLoadingButton() {
+    document.getElementById("add-story-button").classList.remove("hidden");
+    document.getElementById("add-story-loading-button").classList.add("hidden");
+  }
 }

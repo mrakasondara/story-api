@@ -29,7 +29,6 @@ export default class Map {
 
       const response = await fetch(url);
       const json = await response.json();
-      console.log(json);
       const place = json.features[0].place_name.split(",");
       return [place.at(-2), place.at(-1)].map((name) => name).join(",");
     } catch (error) {

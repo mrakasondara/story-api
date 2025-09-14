@@ -20,11 +20,7 @@ export default class HomePage {
       </section>
       <section class="my-[3rem]">
         <h1 class="text-xl font-firasans-bold text-main">New Stories</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 overflow-hidden gap-3 lg:gap-4 mt-5" id="story-list">
-          <loading-story-item class="hidden"></loading-story-item>
-          <loading-story-item class="hidden"></loading-story-item>
-          <loading-story-item class="hidden"></loading-story-item>
-          <loading-story-item class="hidden"></loading-story-item>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 overflow-hidden gap-3 lg:gap-4 mt-5 p-5" id="story-list">
         </div>
       </section>
     `;
@@ -93,9 +89,12 @@ export default class HomePage {
   }
 
   showLoading() {
-    document.querySelectorAll("loading-story-item").forEach((item) => {
-      item.classList.remove("hidden");
-    });
+    document.getElementById("story-list").innerHTML = `
+    <loading-story-item></loading-story-item>
+    <loading-story-item></loading-story-item>
+    <loading-story-item></loading-story-item>
+    <loading-story-item></loading-story-item>
+    `;
     document.querySelectorAll("story-item").forEach((item) => {
       item.classList.add("hidden");
     });
@@ -103,7 +102,7 @@ export default class HomePage {
 
   hideLoading() {
     document.querySelectorAll("loading-story-item").forEach((item) => {
-      item.classList.add("hidden");
+      item.remove();
     });
     document.querySelectorAll("story-item").forEach((item) => {
       item.classList.remove("hidden");

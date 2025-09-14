@@ -54,5 +54,117 @@ export default class Camera {
 
       this.#streaming = true;
     };
+
+    this.#selectCameraElement.onchange = async () => {
+      await this.stop();
+      await this.launch();
+    };
+  }
+
+  async #populateDeviceList(stream) {
+    try {
+      if (!(stream instanceof MediaStream)) {
+        return Promise.reject(Error("MediaStream not found!"));
+      }
+
+      const { deviceId } = stream.getVideoTracks()[0].getSettings();
+      const enumerateDevices = await navigator.mediaDevices.enumerateDevices();
+      const list = enumerateDevices.filter((device) => {
+        return device.kind === "videoinput";
+      });
+
+      const html = list.reduce((acc, device, currentIndex) => {
+        return acc.concat(`
+            <option
+            value="${device.deviceId}"
+            ${deviceId === device.deviceId ? "selected" : ""}
+          >
+            ${device.label || `Camera ${currentIndex + 1}`}
+          </option>
+        
+        `);
+      }, "");
+
+      this.#selectCameraElement.innerHTML = html;
+    } catch (error) {
+      console.error("#populateDeviceList: error:", error);
+    }
+  }
+
+  async #getStream() {
+    try {
+      const deviceId =
+        !this.#streaming && !this.#selectCameraElement.value
+          ? undefined
+          : { exact: this.#selectCameraElement.value };
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          aspectRatio: 4 / 3,
+          deviceId,
+        },
+      });
+      await this.#populateDeviceList(stream);
+      return stream;
+    } catch (error) {
+      console.error("#getStream: error:", error);
+      return null;
+    }
+  }
+
+  async launch() {
+    this.#currentStream = await this.#getStream();
+
+    Camera.addNewStream(this.#currentStream);
+
+    this.#videoElement.srcObject = this.#currentStream;
+    this.#videoElement.play();
+
+    this.#clearCanvas();
+  }
+
+  stop() {
+    if (this.#videoElement) {
+      this.#videoElement.srcObject = null;
+      this.#streaming = false;
+    }
+
+    if (this.#currentStream instanceof MediaStream) {
+      this.#currentStream.getTracks().forEach((track) => track.stop());
+    }
+
+    this.#clearCanvas();
+  }
+
+  #clearCanvas() {
+    const context = this.#canvasElement.getContext("2d");
+    context.fillStyle = "#AAAAAA";
+    context.fillRect(
+      0,
+      0,
+      this.#canvasElement.width,
+      this.#canvasElement.height
+    );
+  }
+
+  async takePicture() {
+    if (!(this.#width && this.#height)) {
+      return null;
+    }
+
+    const context = this.#canvasElement.getContext("2d");
+
+    this.#canvasElement.width = this.#width;
+    this.#canvasElement.height = this.#height;
+
+    context.drawImage(this.#videoElement, 0, 0, this.#width, this.#height);
+    return await new Promise((resolve) => {
+      this.#canvasElement.toBlob((blob) => resolve(blob));
+    });
+  }
+
+  addCheeseButtonListener(selector, callback) {
+    this.#takePictureButton = document.querySelector(selector);
+    this.#takePictureButton.onclick = callback;
   }
 }

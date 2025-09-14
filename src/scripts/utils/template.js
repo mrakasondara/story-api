@@ -1,5 +1,6 @@
 export function generateUnauthenticatedNavigationListTemplate() {
   return `
+  <li><a href="#/add-story" class="hover:underline">Add Story</a></li>
       <li><a href="#/login" class="hover:underline">Login</a></li>
       <li><a href="#/register" class="hover:underline">Register</a></li>
     `;

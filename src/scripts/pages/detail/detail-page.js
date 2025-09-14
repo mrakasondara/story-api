@@ -4,6 +4,7 @@ import * as StoryAPI from "../../data/api";
 import StoryDetail from "../../components/story-detail";
 import LoadingStoryDetail from "../../components/loading-story-detail";
 import Map from "../../utils/map";
+import { showAlert } from "../../utils";
 
 export default class DetailPage {
   #presenter = null;
@@ -70,6 +71,6 @@ export default class DetailPage {
   }
 
   populateStoryDetailError() {
-    console.log("error detail");
+    showAlert("Detail Page Error: something error", "failed");
   }
 }

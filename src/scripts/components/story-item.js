@@ -21,7 +21,7 @@ class StoryItem extends HTMLElement {
   render(story) {
     const date = new Date(story.createdAt);
     return (this.innerHTML = `
-        <div class="card bg-base-100 w-full md:w-96 max-h-96 shadow-sm font-firasans">
+        <div class="card bg-base-100 max-h-[500px] md:max-h-96 shadow-sm font-firasans">
             <figure>
               <img
                 src="${story.photoUrl}"

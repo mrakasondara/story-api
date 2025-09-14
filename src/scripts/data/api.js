@@ -89,3 +89,48 @@ export async function getStoryDetail(storyId) {
     ok: fetchResponse.ok,
   };
 }
+
+export async function storeNewStory({ description, photo, lat, lon }) {
+  const accessToken = getAccessToken();
+
+  const formData = new FormData();
+  formData.set("description", description);
+  formData.set("photo", photo);
+  formData.set("lat", lat);
+  formData.set("lon", lon);
+
+  const fetchResponse = await fetch(ENDPOINTS.ADD_STORY, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${accessToken}` },
+    body: formData,
+  });
+
+  const json = await fetchResponse.json();
+
+  return {
+    ...json,
+    ok: fetchResponse.ok,
+  };
+}
+
+export async function storeNewStoryGuest({ description, photo, lat, lon }) {
+  const accessToken = getAccessToken();
+
+  const formData = new FormData();
+  formData.set("description", description);
+  formData.set("photo", photo);
+  formData.set("lat", lat);
+  formData.set("lon", lon);
+
+  const fetchResponse = await fetch(ENDPOINTS.ADD_STORY_GUEST, {
+    method: "POST",
+    body: formData,
+  });
+
+  const json = await fetchResponse.json();
+
+  return {
+    ...json,
+    ok: fetchResponse.ok,
+  };
+}

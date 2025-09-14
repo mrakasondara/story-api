@@ -33,7 +33,6 @@ export default class DetailPresenter {
       }
 
       const story = await storyMapper(response.story);
-      console.log(story);
       this.#view.populateStoryDetailAndInitialMap(story);
     } catch (error) {
       console.error("initialStoriesError:", error);

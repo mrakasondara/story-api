@@ -16,7 +16,6 @@ class StoryDetail extends HTMLElement {
       lat: value.lat,
       lon: value.lon,
     };
-    // console.log(value);
     return this.render(story);
   }
 
