@@ -13,7 +13,7 @@ export default class DetailPage {
   async render() {
     return `
         <section class="flex flex-col font-firasans" id="detail-page">
-            <h1 class="text-2xl font-bold text-main mt-5 text-center">Detail Story</h1>
+            <h1 class="text-2xl font-bold text-main mt-[5rem] text-center" tabindex="0">Detail Story</h1>
         </section>
         `;
   }

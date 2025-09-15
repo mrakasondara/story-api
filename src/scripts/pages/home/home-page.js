@@ -13,7 +13,7 @@ export default class HomePage {
   async render() {
     return `
       <section class="flex flex-col">
-        <div class="min-h-[400px] h-[400px] relative bg-slate-100 rounded-lg">
+        <div class="min-h-[400px] h-[400px] relative bg-slate-100 rounded-lg mt-[5rem]">
           <div id="map" class="min-h-[400px] h-[400px] relative rounded-lg"></div>
           <div id="skeleton-map" class="skeleton h-50 md:h-[20rem] lg:h-[400px] w-full hidden"></div>
         </div>

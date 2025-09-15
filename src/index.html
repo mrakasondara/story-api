@@ -13,10 +13,19 @@
     <title>CeritaKita - Story App</title>
   </head>
   <body class="bg-secondary">
-    <header class="flex bg-main px-4 py-2 justify-between items-center">
-      <h1 class="text-[#FFFDF6] text-2xl font-bold font-asimovian">
+    <button
+      class="bg-cyan-600 focus:underline text-white font-firasans px-2 py-1 translate-y-[-150%] focus:translate-y-[150%] left-[10] absolute z-11"
+      id="skip-content-button"
+    >
+      Skip to content
+    </button>
+    <header
+      class="flex bg-main px-4 py-2 justify-between items-center fixed w-full mb-5 z-10"
+    >
+      <a class="text-[#FFFDF6] text-2xl font-bold font-asimovian" href="#/">
         CeritaKita
-      </h1>
+      </a>
+
       <nav id="navigation-drawer" class="navigation-drawer font-firasans">
         <ul id="nav-list-menu" class="nav-list lg:text-white">
           <li><a href="#/">Beranda</a></li>
@@ -25,7 +34,10 @@
 
       <button id="drawer-button" class="drawer-button">☰</button>
     </header>
-
-    <main id="main-content" class="flex flex-col w-full lg:mx-auto p-5"></main>
+    <confirm-alert></confirm-alert>
+    <main
+      id="main-content"
+      class="flex flex-col w-full lg:w-3/4 lg:mx-auto p-5"
+    ></main>
   </body>
 </html>

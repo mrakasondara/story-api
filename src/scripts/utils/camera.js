@@ -131,6 +131,7 @@ export default class Camera {
 
     if (this.#currentStream instanceof MediaStream) {
       this.#currentStream.getTracks().forEach((track) => track.stop());
+      console.log("stop");
     }
 
     this.#clearCanvas();

@@ -21,7 +21,7 @@ class StoryItem extends HTMLElement {
   render(story) {
     const date = new Date(story.createdAt);
     return (this.innerHTML = `
-        <div class="card bg-base-100 max-h-[500px] md:max-h-96 shadow-sm font-firasans">
+        <div class="card bg-base-100 max-h-[500px] md:max-h-96 shadow-sm focus:ring font-firasans" tabindex="0">
             <figure>
               <img
                 src="${story.photoUrl}"
@@ -33,24 +33,30 @@ class StoryItem extends HTMLElement {
               <div class="grid">
                 <p class="flex items-center gap-2 text-[11px]">
                   <span class="material-icons-outlined" id="icon-story-item">account_circle</span>
-                  ${story.name}
+                  <span tabindex="0" aria-label="author story">${
+                    story.name
+                  }</span>
                 </p>
                 <p class="flex items-center gap-2 text-[11px]">
                   <span class="material-icons-outlined" id="icon-story-item">date_range</span>
-                  ${date.toLocaleString()}
+                  <span tabindex="0" aria-label="date created">${date.toLocaleString()}</span>
                 </p>
                 <p class="flex items-center gap-2 text-[11px] ${
                   story.lat ? "" : "hidden"
                 }">
                   <span class="material-icons-outlined" id="icon-story-item">location_on</span>
-                  ${story.lat},${story.lon}
+                  <span tabindex="0" aria-label="story location">${story.lat},${
+      story.lon
+    }</span>
                 </p>
               </div>
-              <p class="text-md">${story.description}</p>
+              <p class="text-md" tabindex="0" aria-label="story description">${
+                story.description
+              }</p>
             <div class="card-actions justify-end">
                 <a href="#/story/${
                   story.id
-                }" class="btn bg-main text-secondary">Detail</a>
+                }" class="btn bg-main text-secondary" aria-label="detail page">Detail</a>
               </div>
             </div>
         </div>

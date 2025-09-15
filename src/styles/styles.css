@@ -4,6 +4,30 @@
   --color-secondary: #fffdf6;
 }
 
+@keyframes full-slide-from-right {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes full-slide-to-left {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+::view-transition-old(root) {
+  animation-name: full-slide-to-left;
+  animation-duration: 900ms;
+  animation-timing-function: ease-out;
+}
+
+::view-transition-new(root) {
+  animation-name: full-slide-from-right;
+  animation-duration: 900ms;
+  animation-timing-function: ease-out;
+}
+
 html {
   background-color: var(--color-secondary);
 }
@@ -156,12 +180,21 @@ button.bg-main:hover {
     opacity: 1;
   }
 }
+
 .spinner {
   animation: spin 2s linear infinite;
 }
 
 .alert-absolute {
   position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 100;
+  animation: fade 0.8s ease-in-out;
+}
+
+.alert-fixed {
+  position: fixed;
   top: 10px;
   right: 10px;
   z-index: 100;

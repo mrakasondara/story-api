@@ -32,16 +32,20 @@ class StoryDetail extends HTMLElement {
                 <div class="flex justify-between text-main">
                     <p class="flex items-center font-bold gap-2">
                         <span class="material-icons-outlined">account_circle</span>
-                        ${story.name}
+                        <span tabindex="0" aria-label="author story">${
+                          story.name
+                        }</span>
                     </p>
-
+                        
                     <p class="flex items-center gap-2">
-                        ${date.toLocaleString()}
-                        <span class="material-icons-outlined">date_range</span>
+                    <span tabindex="0" aria-label="date story">${date.toLocaleString()}</span>
+                    <span class="material-icons-outlined">date_range</span>
                     </p>
                 </div>
                 
-            <p class="text-justify opacity-75">${story.description}</p>
+            <p class="text-justify opacity-75" tabindex="0" aria-label="description">${
+              story.description
+            }</p>
             </div>
 
             <h2 class="text-xl font-bold text-main mt-5">Location</h2>

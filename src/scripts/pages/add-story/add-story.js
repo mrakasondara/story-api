@@ -16,17 +16,17 @@ export default class AddStory {
     return `
         <section class="flex flex-col font-firasans">
         
-        <form class="flex flex-col mx-2 my-[3rem] card shadow-sm p-5 h-[102rem]" id="add-story-form">
-        <h1 class="text-2xl font-bold text-main mt-5 text-center">Add Story</h1>
+        <form class="flex flex-col mx-2 my-[3rem] card shadow-sm p-5 h-[110rem]" id="add-story-form">
+        <h1 class="text-2xl font-bold text-main mt-3 text-center">Add Story</h1>
                     <div class="flex justify-center gap-2 mt-3" id="photo-preview-container">
                         <img src="/images/placeholder.png" class="h-80 rounded-lg" alt="photo-preview" id="photo-preview" />
                     </div>
 
-                    <div class="flex flex-col lg:flex-row justify-center gap-2 mt-2 hidden" id="camera-container">
-                        <video src="" id="camera-video" class="w-full rounded-lg">
+                    <div class="block mt-2 hidden px-5" id="camera-container">
+                        <video src="" id="camera-video" class="w-full h-80 rounded-lg">
                           Video stream not available.
                         </video>
-                        <canvas id="camera-canvas" class="rounded-lg"></canvas>
+                        <canvas id="camera-canvas" class="rounded-lg mt-1 h-80 mx-auto" alt="photo picture"></canvas>
                     </div>
 
                     <div class="grid gap-3 mt-3">
@@ -38,8 +38,10 @@ export default class AddStory {
                             <div class="text-red-500 hidden font-bold" id="validator-file"></div>
                         </fieldset>
 
-                        <label for="camera" class="font-bold">Select Camera</label>
-                        <select name="camera" id="camera-select" class="select select-neutral"></select>
+                        <div class="grid hidden" id="camera-select-container">
+                          <label for="camera" class="font-bold">Select Camera</label>
+                          <select name="camera" id="camera-select" class="select select-neutral"></select>
+                        </div>
                         
                         <div class="flex gap-2">
                           <button class="bg-main text-secondary cursor-pointer px-3 py-2 mt-4 rounded-lg w-1/2 transition ease-in" id="open-story-camera-button">Open Camera</button>
@@ -154,11 +156,15 @@ export default class AddStory {
       this.#camera.stop();
     });
 
+    const cameraSelectContainer = document.getElementById(
+      "camera-select-container"
+    );
     const cameraContainer = document.getElementById("camera-container");
     document
       .getElementById("open-story-camera-button")
       .addEventListener("click", async (e) => {
         cameraContainer.classList.toggle("hidden");
+        cameraSelectContainer.classList.toggle("hidden");
         photoPreview.classList.toggle("hidden");
         this.#isCameraOpen = !cameraContainer.classList.contains("hidden");
         if (this.#isCameraOpen) {

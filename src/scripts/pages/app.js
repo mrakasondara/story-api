@@ -5,18 +5,32 @@ import {
   generateUnauthenticatedNavigationListTemplate,
   generateAuthenticatedNavigationListTemplate,
 } from "../utils/template";
+import { transitionHelper } from "../utils";
+import "../components/confirm-alert";
 
 class App {
   #content = null;
   #drawerButton = null;
   #navigationDrawer = null;
+  #skipToContentButton = null;
 
-  constructor({ navigationDrawer, drawerButton, content }) {
+  constructor({
+    navigationDrawer,
+    drawerButton,
+    content,
+    skipToContentButton,
+  }) {
     this.#content = content;
     this.#drawerButton = drawerButton;
     this.#navigationDrawer = navigationDrawer;
+    this.#skipToContentButton = skipToContentButton;
 
+    this.#init();
+  }
+
+  #init() {
     this._setupDrawer();
+    this.#skipToContent();
   }
 
   _setupDrawer() {
@@ -40,6 +54,12 @@ class App {
     });
   }
 
+  #skipToContent() {
+    this.#skipToContentButton.addEventListener("click", () => {
+      this.#content.focus();
+    });
+  }
+
   #setUpNavigationList() {
     const navListMenu = document.getElementById("nav-list-menu");
     const isLogin = !!getAccessToken();
@@ -55,12 +75,12 @@ class App {
 
     const logoutButton = document.getElementById("logout-button");
     userContainer.append(logoutButton);
+
+    const confirmAlert = document.querySelector("confirm-alert");
+
     logoutButton.addEventListener("click", (e) => {
       e.preventDefault();
-      if (confirm("Are you sure?")) {
-        getLogout();
-        location.hash = "/login";
-      }
+      confirmAlert.showAlert();
     });
   }
 
@@ -73,9 +93,18 @@ class App {
     }
     const page = route();
 
-    this.#content.innerHTML = await page.render();
-    this.#setUpNavigationList();
-    await page.afterRender();
+    const transition = transitionHelper({
+      updateDOM: async () => {
+        this.#content.innerHTML = await page.render();
+        await page.afterRender();
+      },
+    });
+
+    transition.ready.catch(console.error);
+    transition.updateCallbackDone.then(() => {
+      scrollTo({ top: 0, behavior: "instant" });
+      this.#setUpNavigationList();
+    });
   }
 }
 
